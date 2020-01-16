@@ -1,0 +1,26 @@
+{
+    "status": false,
+    "error": [
+
+        {
+             "location": "body",
+            "param": "field",
+0            "msg": "Field should not be empty",
+            "value": ""
+
+        }
+    ]
+}
+{
+    "status": false,
+    "error": [
+
+        {
+             "location": "body",
+            "param": "field",
+0            "msg": "Field should not be empty",
+            "value": ""
+
+        }
+    ]
+}

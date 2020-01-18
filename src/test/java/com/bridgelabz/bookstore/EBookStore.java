@@ -15,7 +15,7 @@ public class EBookStore {
         RestAssured.baseURI = "http://192.168.0.127:3000";
     }
 
-    @Test
+    @Test()
     public void givenEBookStore_SearchBookByAuthorFullName_ShouldReturnBooks() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("field","Stephen King");
@@ -74,5 +74,21 @@ public class EBookStore {
         int statusCode = response.getStatusCode();
         Assert.assertEquals(statusCode,422);
     }
+    @Test
+    public void givenMinimumAndMaximumPriceLimit_WhenBookDetailsAvailable_ThenShouldReturnExactNumberOfBook() {
+        JSONObject bookPriceLimits = new JSONObject();
+        bookPriceLimits.put("minPrice", "100");
+        bookPriceLimits.put("maxPrice", "200");
+        RestAssured.baseURI = "http://192.168.0.127:3000";
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .body(bookPriceLimits.toJSONString())
+                .queryParam("pageNo", 1)
+                .when()
+                .get("/sortBooks")
+                .then()
+                .assertThat().statusCode(200);
 
+
+    }
 }

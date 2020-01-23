@@ -13,82 +13,90 @@ import org.junit.Test;
 
 public class EBookStoreApplicationTestClass {
     @Before
-    public void setUp() throws Exception {
-        RestAssured.baseURI = "http://192.168.0.127:3000";
+    public void setUp() {
+        RestAssured.baseURI = "http://192.168.0.148:3000";
     }
 
     @Test()
-    public void givenEBookStore_SearchBookByAuthorFullName_ShouldReturnBooks() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("field", "Stephen King");
+    public void givenEBookStore_WhenSearchBookByAuthorFullName_ThenShouldReturnBooksFound() throws ParseException {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .body(jsonObject.toJSONString())
-                .when().get("/searchBook?pageNo=1");
+                .queryParam("field", "Stephen King")
+                .when().get("/searchBook");
+        int statusCode = response.getStatusCode();
+        Assert.assertEquals(statusCode, 200);
+        JSONObject object = (JSONObject) new JSONParser().parse(response.asString());
+        boolean successStatus = (boolean) object.get("success");
+        String responseMessage = (String) object.get("message");
+        Assert.assertTrue(successStatus);
+        Assert.assertEquals(statusCode, 200);
+        Assert.assertEquals("Books Found", responseMessage);
+    }
+
+    @Test
+    public void givenEBookStore_WhenSearchBookByAuthorInFirstLetter_ThenShouldReturnBooksFound() throws ParseException {
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .queryParam("field", "c")
+                .when().get("/searchBook");
         ResponseBody responseBody = response.body();
         System.out.println("Body" + responseBody.prettyPrint());
         int statusCode = response.getStatusCode();
         Assert.assertEquals(statusCode, 200);
+        JSONObject object = (JSONObject) new JSONParser().parse(response.asString());
+        boolean successStatus = (boolean) object.get("success");
+        String responseMessage = (String) object.get("message");
+        Assert.assertTrue(successStatus);
+        Assert.assertEquals(statusCode, 200);
+        Assert.assertEquals("Books Found", responseMessage);
     }
 
     @Test
-    public void givenEBookStore_SearchBookByAuthorInFirstLetter_ShouldReturnBooks() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("field", "C");
+    public void givenEBookStore_WhenSearchBookByTitle_ThenShouldReturnBooksFound() throws ParseException {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .body(jsonObject.toJSONString())
-                .when().get("/searchBook?pageNo=1");
-        ResponseBody responseBody = response.body();
-        System.out.println("Body" + responseBody.prettyPrint());
+                .queryParam("field", "The Girl in Room 105")
+                .when()
+                .get("/searchBook");
         int statusCode = response.getStatusCode();
         Assert.assertEquals(statusCode, 200);
-    }
-
-    @Test
-    public void givenEBookStore_SearchBookByTitle_ShouldReturnBook() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("field", "The Girl in Room 105");
-        Response response = RestAssured.given()
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
-                .body(jsonObject.toJSONString())
-                .when().get("/searchBook?pageNo=1");
-        ResponseBody responseBody = response.body();
-        System.out.println("Body" + responseBody.prettyPrint());
-        int statusCode = response.getStatusCode();
+        JSONObject object = (JSONObject) new JSONParser().parse(response.asString());
+        boolean successStatus = (boolean) object.get("success");
+        String responseMessage = (String) object.get("message");
+        Assert.assertTrue(successStatus);
         Assert.assertEquals(statusCode, 200);
+        Assert.assertEquals("Books Found", responseMessage);
     }
 
     @Test
-    public void givenEBookStore_SearchBookByTitle_ShouldReturnFalse() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("field", " ");
+    public void givenEBookStore_WhenSearchBookByTitle_ThenShouldReturnValidationError() throws ParseException {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .body(jsonObject.toJSONString())
-                .when().get("/searchBook?pageNo=1");
+                .queryParam("field", "")
+                .when().get("/searchBook");
         ResponseBody responseBody = response.body();
-        System.out.println(responseBody.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(response.asString());
+        boolean successStatus = (boolean) object.get("success");
+        String responseMessage = (String) object.get("message");
         int statusCode = response.getStatusCode();
+        Assert.assertFalse(successStatus);
         Assert.assertEquals(statusCode, 422);
+        Assert.assertEquals("Validation Error", responseMessage);
     }
 
     @Test
-    public void givenMinimumAndMaximumPriceLimit_WhenBookDetailsAvailable_ThenShouldReturnExactNumberOfBook() throws ParseException {
-        JSONObject bookPriceLimits = new JSONObject();
-        bookPriceLimits.put("minPrice", 100);
-        bookPriceLimits.put("maxPrice", 200);
+    public void givenMinimumAndMaximumPriceLimit_WhenBookDetailsAvailable_ThenShouldReturnExactListOfBooks() throws ParseException {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .body(bookPriceLimits.toJSONString())
-                .queryParam("pageNo", 1)
+                .queryParam("minPrice", 100)
+                .queryParam("maxPrice", 200)
                 .when()
-                .get("/sortBooks?pageNo=1");
+                .get("/sortBooks");
         ResponseBody body = response.getBody();
         JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
         boolean status = (boolean) object.get("success");
@@ -96,31 +104,6 @@ public class EBookStoreApplicationTestClass {
         Assert.assertTrue(status);
         Assert.assertEquals("All books are sorted", message);
     }
-
-    @Test
-    public void givenMinimumPriceAndMaximumPriceInNegativeFormat_WhenNotAcceptible_ShouldGiveProperValidationMessage() throws ParseException {
-        JSONObject bookPriceLimits = new JSONObject();
-        bookPriceLimits.put("minPrice", -100);
-        bookPriceLimits.put("maxPrice", -200);
-        Response response = RestAssured.given()
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
-                .body(bookPriceLimits.toJSONString())
-                .queryParam("pageNo", 1)
-                .when()
-                .get("/sortBooks?pageNo=1");
-        ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
-        boolean status = (boolean) object.get("success");
-        String message = (String) object.get("message");
-        Assert.assertTrue(status);
-        Assert.assertEquals("All books are sorted", message);
-        String bookData = (String) object.get("data");
-        JSONObject bookDataJsonValues = (JSONObject) new JSONParser().parse(bookData.toString());
-        String messageBetweenData = (String) bookDataJsonValues.get("message");
-        Assert.assertEquals("Book Not Found", messageBetweenData);
-    }
-
 
     @Test
     public void givenBooks_WhenBookShowDetail_ThenShouldReturnCorrectBookDetail() {
@@ -160,6 +143,4 @@ public class EBookStoreApplicationTestClass {
                 .then()
                 .assertThat().statusCode(200);
     }
-
-
 }

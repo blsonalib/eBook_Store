@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" tests="8" skipped="0" failures="0" errors="0" timestamp="2020-01-23T10:44:29" hostname="admin1-H110M-H" time="1.105">
+<testsuite name="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" tests="8" skipped="0" failures="0" errors="0" timestamp="2020-01-23T12:06:24" hostname="admin1-H110M-H" time="1.014">
   <properties/>
-  <testcase name="givenEBookStore_WhenSearchBookByTitle_ThenShouldReturnBooksFound" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.853"/>
-  <testcase name="givenBooksList_WhenBookPaginationMode_ThenShouldReturnCorrect" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.055"/>
+  <testcase name="givenEBookStore_WhenSearchBookByTitle_ThenShouldReturnBooksFound" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.779"/>
+  <testcase name="givenBooksList_WhenBookPaginationMode_ThenShouldReturnCorrect" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.058"/>
   <testcase name="givenBooks_WhenBookShowDetail_ThenShouldReturnPageNumber2" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.026"/>
-  <testcase name="givenEBookStore_WhenSearchBookByAuthorFullName_ThenShouldReturnBooksFound" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.041"/>
-  <testcase name="givenEBookStore_WhenSearchBookByAuthorInFirstLetter_ThenShouldReturnBooksFound" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.064"/>
-  <testcase name="givenEBookStore_WhenSearchBookByTitle_ThenShouldReturnValidationError" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.013"/>
-  <testcase name="givenBooks_WhenBookShowDetail_ThenShouldReturnCorrectBookDetail" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.018"/>
-  <testcase name="givenMinimumAndMaximumPriceLimit_WhenBookDetailsAvailable_ThenShouldReturnExactListOfBooks" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.033"/>
+  <testcase name="givenEBookStore_WhenSearchBookByAuthorFullName_ThenShouldReturnBooksFound" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.025"/>
+  <testcase name="givenEBookStore_WhenSearchBookByAuthorInFirstLetter_ThenShouldReturnBooksFound" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.074"/>
+  <testcase name="givenEBookStore_WhenSearchBookByTitle_ThenShouldReturnValidationError" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.011"/>
+  <testcase name="givenBooks_WhenBookShowDetail_ThenShouldReturnCorrectBookDetail" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.016"/>
+  <testcase name="givenMinimumAndMaximumPriceLimit_WhenBookDetailsAvailable_ThenShouldReturnExactListOfBooks" classname="com.bridgelabz.bookstore.EBookStoreApplicationTestClass" time="0.023"/>
   <system-out><![CDATA[{
     "success": true,
     "message": "Books Found",

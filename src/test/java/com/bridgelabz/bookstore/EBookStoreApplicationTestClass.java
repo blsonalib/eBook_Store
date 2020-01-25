@@ -14,7 +14,7 @@ import org.junit.Test;
 public class EBookStoreApplicationTestClass {
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://192.168.0.148:3000";
+        RestAssured.baseURI = "http://13.234.136.55:8080";
     }
 
     @Test()

@@ -182,4 +182,50 @@ public class EBookStoreApplicationTestClass {
         response.then().assertThat().statusCode(200);
         response.then().assertThat().contentType(ContentType.JSON);
     }
+
+    @Test()
+    public void givenUserDetails_WhenInvalidUserAddress_ThenShouldNotAddUserInDatabase() {
+        JSONObject userDetails = new JSONObject();
+        userDetails.put("username", "Laxman");
+        userDetails.put("mobile", "7030493048");
+        userDetails.put("pincode", "431534");
+        userDetails.put("locality", "Ra");
+        userDetails.put("address", "Raawan");
+        userDetails.put("emailId", "raawan@gmail.com");
+        userDetails.put("city", "Nanded");
+        userDetails.put("landmark", "LLLL");
+        userDetails.put("type", "home");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(userDetails.toJSONString())
+                .when()
+                .post("/addUser");
+        response.then().assertThat().statusCode(422);
+        response.then().assertThat().contentType("application/json; charset=utf-8");
+        response.then().assertThat().contentType(ContentType.JSON);
+    }
+
+    @Test()
+    public void givenUserDetails_WhenInvalidUserEmail_ThenShouldNotAddUserInDatabase() {
+        JSONObject userDetails = new JSONObject();
+        userDetails.put("username", "Laxman");
+        userDetails.put("mobile", "07030493048");
+        userDetails.put("pincode", "4315");
+        userDetails.put("locality", "Rampur");
+        userDetails.put("address", "Raawan");
+        userDetails.put("emailId", "sona.gmail.com");
+        userDetails.put("city", "Nanded");
+        userDetails.put("landmark", "LLLL");
+        userDetails.put("type", "home");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(userDetails.toJSONString())
+                .when()
+                .post("/addUser");
+        response.then().assertThat().statusCode(422);
+        response.then().assertThat().contentType("application/json; charset=utf-8");
+        response.then().assertThat().contentType(ContentType.JSON);
+    }
 }

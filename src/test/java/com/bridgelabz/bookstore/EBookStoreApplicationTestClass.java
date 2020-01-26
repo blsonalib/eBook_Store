@@ -14,7 +14,7 @@ import org.junit.Test;
 public class EBookStoreApplicationTestClass {
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://13.234.136.55:3000";
+        RestAssured.baseURI = "http://192.168.0.148:3000";
     }
 
     @Test()
@@ -42,7 +42,7 @@ public class EBookStoreApplicationTestClass {
                 .queryParam("field", "c")
                 .when().get("/searchBook");
         ResponseBody responseBody = response.body();
-        System.out.println("Body" + responseBody.prettyPrint());
+        System.out.println("Body" + responseBody.asString());
         int statusCode = response.getStatusCode();
         Assert.assertEquals(statusCode, 200);
         JSONObject object = (JSONObject) new JSONParser().parse(response.asString());
@@ -98,7 +98,7 @@ public class EBookStoreApplicationTestClass {
                 .when()
                 .get("/sortBooks");
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         boolean status = (boolean) object.get("success");
         String message = (String) object.get("message");
         Assert.assertTrue(status);
@@ -142,5 +142,44 @@ public class EBookStoreApplicationTestClass {
                 .get("/books")
                 .then()
                 .assertThat().statusCode(200);
+    }
+
+
+    @Test()
+    public void givenUserDetails_WhenValidUserDetails_ThenShouldAddUserInDatabase() {
+        JSONObject userDetails = new JSONObject();
+        userDetails.put("username", "Laxman");
+        userDetails.put("mobile", "7030493048");
+        userDetails.put("pincode", "431513");
+        userDetails.put("locality", "Rampur");
+        userDetails.put("address", "Raawan");
+        userDetails.put("emailId", "raawan@gmail.com");
+        userDetails.put("city", "Nanded");
+        userDetails.put("landmark", "LLLL");
+        userDetails.put("type", "home");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(userDetails.toJSONString())
+                .when()
+                .post("/addUser");
+        response.then().assertThat().statusCode(200);
+        response.then().assertThat().contentType("application/json; charset=utf-8");
+        response.then().assertThat().contentType(ContentType.JSON);
+    }
+
+    @Test
+    public void givenBookIdAndUserId_WhenAvailable_ThenShouldAbleToOrderBook() {
+        JSONObject orderBookDetails = new JSONObject();
+        orderBookDetails.put("userId", "5e2c0eb87a7bdf43b908bf81");
+        orderBookDetails.put("bookId", "5e1ff27d9d6d3b1318e58143");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(orderBookDetails.toJSONString())
+                .when()
+                .post("/orderBook");
+        response.then().assertThat().statusCode(200);
+        response.then().assertThat().contentType(ContentType.JSON);
     }
 }
